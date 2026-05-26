@@ -1,42 +1,52 @@
-import { useState, useEffect } from "react";
-import MessageList from "./components/MessageList";
-import MessageForm from "./components/MessageForm";
-import type { Message } from "./types";
+import { useState, useEffect }  from "react";
+import MessageList              from "./components/MessageList";
+import MessageForm              from "./components/MessageForm";
+import type { Message }         from "./types";
 import "./App.css";
 
-const MESSAGES_KEY = "chatMessagesKey";
-const NAME_KEY = "chatNameKey";
+const SERVER_URL  = "https://server-beeko-chat.hosting.codeyourfuture.io";
+const WS_URL      = "wss://server-beeko-chat.hosting.codeyourfuture.io";
 
 function App() {
-
-  const [messages, setMessages] = useState<Message[]>(() => {
-    const stored = localStorage.getItem(MESSAGES_KEY);
-    return stored ? JSON.parse(stored) : [];
-  });
-
+  const [messages, setMessages] = useState<Message[]>([]);
   const [name, setName] = useState<string>(() => {
-    return localStorage.getItem(NAME_KEY) ?? "";
+    return localStorage.getItem("chatNameKey") ?? "";
   });
 
   useEffect(() => {
-    localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
-  }, [messages]);
+    fetch(`${SERVER_URL}/messages`)
+      .then((res) => res.json())
+      .then((data) => setMessages(data))
+      .catch((err) => console.error("failed to fetch messages", err));
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem(NAME_KEY, name);
+    const ws = new WebSocket(WS_URL);
+
+    ws.onmessage = (event) => {
+      const newMessage: Message = JSON.parse(event.data);
+      setMessages((prev) => [...prev, newMessage]);
+    };
+
+    ws.onerror = (err) => console.error("websocket error", err);
+
+    return () => ws.close();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("chatNameKey", name);
   }, [name]);
 
-  const handleSend = (text: string) => {
-    const newMessage: Message = {
-      id: crypto.randomUUID(),
-      name,
-      text,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-    setMessages((prev) => [...prev, newMessage]);
+  const handleSend = async (text: string) => {
+    try {
+      await fetch(`${SERVER_URL}/messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, text }),
+      });
+    } catch (err) {
+      console.error("failed to send message", err);
+    }
   };
 
   return (
