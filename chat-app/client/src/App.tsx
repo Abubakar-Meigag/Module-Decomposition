@@ -54,7 +54,7 @@ function App() {
       <h1 className="app_title">Beeko Chat App</h1>
       <div className="app_container">
         <MessageList messages={messages} />
-        <MessageForm name={name} onNameChange={setName} onSend={handleSend} />
+        <MessageForm name={name} onNameChange={setName} onSend={handleSend} messageCount={messages.length} />
       </div>
     </div>
   );

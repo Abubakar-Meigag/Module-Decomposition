@@ -5,9 +5,10 @@ interface Props {
   name: string;
   onNameChange: (name: string) => void;
   onSend: (text: string) => void;
+  messageCount: number;
 }
 
-function MessageForm({ name, onNameChange, onSend }: Props) {
+function MessageForm({ name, onNameChange, onSend, messageCount }: Props) {
   const [text, setText] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -45,13 +46,18 @@ function MessageForm({ name, onNameChange, onSend }: Props) {
           rows={3}
         />
       </div>
-      <button
-        className="button"
-        type="submit"
-        disabled={!name.trim() || !text.trim()}
-      >
-        Send
-      </button>
+      <div className="actions">
+
+        <span className="count">messages: {messageCount}</span>
+
+        <button
+          className="button"
+          type="submit"
+          disabled={!name.trim() || !text.trim()}
+        >
+          Send
+        </button>
+      </div>
     </form>
   );
 }

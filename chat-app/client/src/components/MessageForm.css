@@ -62,3 +62,18 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fbbf24;
+  border: 2px solid #fbbf24;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+}
