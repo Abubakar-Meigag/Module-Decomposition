@@ -4,8 +4,8 @@ import MessageForm              from "./components/MessageForm";
 import type { Message }         from "./types";
 import "./App.css";
 
-const SERVER_URL  = "https://server-beeko-chat.hosting.codeyourfuture.io";
-const WS_URL      = "wss://server-beeko-chat.hosting.codeyourfuture.io";
+const SERVER_URL  = "https://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
+const WS_URL      = "wss://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
