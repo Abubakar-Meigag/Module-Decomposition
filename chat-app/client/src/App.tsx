@@ -1,14 +1,16 @@
-import { useState, useEffect }  from "react";
-import MessageList              from "./components/MessageList";
-import MessageForm              from "./components/MessageForm";
-import type { Message }         from "./types";
+import { useState, useEffect } from "react";
+import MessageList from "./components/MessageList";
+import MessageForm from "./components/MessageForm";
+import type { Message } from "./types";
 import "./App.css";
 
-const SERVER_URL  = "https://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
-const WS_URL      = "wss://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
+const SERVER_URL = "https://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
+const WS_URL = "wss://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
   const [name, setName] = useState<string>(() => {
     return localStorage.getItem("chatNameKey") ?? "";
   });
@@ -38,13 +40,16 @@ function App() {
   }, [name]);
 
   const handleSend = async (text: string) => {
+
     try {
       await fetch(`${SERVER_URL}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, text }),
       });
+
     } catch (err) {
+      setError("Failed to send message. Please try again.");
       console.error("failed to send message", err);
     }
   };
@@ -54,6 +59,7 @@ function App() {
       <h1 className="app_title">Beeko Chat App</h1>
       <div className="app_container">
         <MessageList messages={messages} />
+        {error && <p className="error">{error}</p>}
         <MessageForm name={name} onNameChange={setName} onSend={handleSend} messageCount={messages.length} />
       </div>
     </div>

@@ -12,10 +12,7 @@ const postMessage = (req, res, wss) => {
     id: uuidv4(),
     name,
     text,
-    timestamp: new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
+    timestamp: new Date().toISOString(),
   };
 
   messages.push(newMessage);
@@ -26,7 +23,7 @@ const postMessage = (req, res, wss) => {
     }
   });
 
-  res.status(201).json(newMessage);
+  res.status(201).end();
 };
 
 module.exports = postMessage;
