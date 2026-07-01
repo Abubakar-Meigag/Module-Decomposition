@@ -8,9 +8,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const usernameCustomMiddleware = (req, res, next) => {
-      const username = req.headers["username"];
-      req.name = username ? username : null;
-      next();
+  const username = req.headers["username"];
+  req.name = username ? username : null;
+  next();
 }
 
 const jsonBodyMustBeAnArrayMiddleware = (req, res, next) => {
@@ -35,6 +35,10 @@ app.post("/custom-middleware", usernameCustomMiddleware, jsonBodyMustBeAnArrayMi
     const username = req.name;
     const subject = req.body;
     const count = subject.length;
+
+    if (!username) {
+      return res.status(401).type("text").send("Unauthorized: Missing or invalid username in the request headers.");
+    }
 
     const authentication = username
       ? `You are authenticated as ${username}`

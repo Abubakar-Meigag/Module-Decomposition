@@ -55,6 +55,10 @@ app.post("/custom-middleware", usernameCustomMiddleware, jsonBodyMustBeAnArrayMi
     const username = req.name;
     const subject = req.body;
     const count = subject.length;
+    
+    if (!username) {
+      return res.status(401).type("text").send("Unauthorized: Missing or invalid username in the request headers.");
+    }
 
     const authentication = username
       ? `You are authenticated as ${username}`
