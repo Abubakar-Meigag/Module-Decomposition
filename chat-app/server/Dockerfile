@@ -1,12 +1,8 @@
 FROM node:20-alpine
-
+ENV NODE_ENV=production
+COPY . /app
 WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
+RUN npm ci --omit=dev
 
 EXPOSE 3000
 
