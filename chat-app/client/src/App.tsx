@@ -4,8 +4,8 @@ import MessageForm from "./components/MessageForm";
 import type { Message } from "./types";
 import "./App.css";
 
-const SERVER_URL = "https://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
-const WS_URL = "wss://ggjpdb4d0e0lrtcdbxpdpsrk.hosting.codeyourfuture.io";
+const SERVER_URL = "https://backend-chat-apps.trainees.hosting.cyf.academy";
+const WS_URL = "wss://backend-chat-apps.trainees.hosting.cyf.academy";
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
